@@ -2,10 +2,8 @@ import re
 
 invalid_logins = []
 users = []
-ip = []
-ports = []
 user_dict = {}
-port_dict = {}
+ip = []
 
 with open("auth.log.testfile", 'r') as file:
     for line in file:
@@ -24,16 +22,7 @@ for line in invalid_logins:
     match = re.search("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line.string)
     ip.append(match.group(0))
 
-    # PORTS (It is done this way so we don't have a bug in which PORT is part of the port dict)
-    match = re.search("port \d+", line.string)
-    matchstring = match.group(0)
-    port = matchstring.split(" ")[1]
-    ports.append(port)
-
 # TODO: INFO: Root doesn't appear in this list, why?
 # TODO: find way to automate lookup of ip origin
 for user in users:
     user_dict[user] = users.count(user)
-
-for port in ports:
-    port_dict[port.strip('\n')] = ports.count(port)
