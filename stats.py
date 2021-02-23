@@ -1,4 +1,6 @@
 import re
+import matplotlib.pyplot as plt
+import pandas as pd
 
 invalid_logins = []
 users = []
@@ -26,3 +28,21 @@ for line in invalid_logins:
 # TODO: find way to automate lookup of ip origin
 for user in users:
     user_dict[user] = users.count(user)
+
+# plot users that are used more than 20 times
+cleanuser = []
+occurences = []
+for k, v in user_dict.items():
+    if v > 20:
+        cleanuser.append(k)
+        occurences.append(v)
+
+df = pd.DataFrame({"usernames":cleanuser,"occurences":occurences})
+df_sorted = df.sort_values('occurences',ascending=False)
+
+fig = plt.figure()
+plt.bar('usernames', 'occurences',data=df_sorted)
+plt.xlabel('usernames')
+plt.ylabel('occurences')
+plt.title('common usernames used in ssh probes')
+plt.savefig("./img/usernames.png")
